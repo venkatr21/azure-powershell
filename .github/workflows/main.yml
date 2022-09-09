@@ -18,6 +18,7 @@ jobs:
           run: |
             Get-Module
             Import-Module Az.Accounts -Verbose
+            Get-AzEnvironment
             Get-Module
 
         - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
