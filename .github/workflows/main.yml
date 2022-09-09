@@ -9,6 +9,11 @@ jobs:
   Windows-latest:
       runs-on: windows-latest
       steps:
+        - name: Install
+          shell: pwsh
+          run: |
+            Install-Module Az.Accounts -repository PSGallery
+
         - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
           uses: azure/login@v1
           with:
@@ -21,6 +26,5 @@ jobs:
           uses: azure/powershell@v1
           with:
              inlineScript: |
-               Get-AzResourceGroup
                Get-Module
              azPSVersion: "latest"
