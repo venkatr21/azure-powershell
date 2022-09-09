@@ -21,6 +21,19 @@ jobs:
             Get-AzEnvironment
             Get-Module
 
+        - uses: actions/setup-node@v2
+        - run: npm install @actions/core@1.6.0-beta.0 
+      
+        - uses: actions/github-script@v4
+          id: idtoken
+          with:
+          # Audience field is optional. By default, the value is the repo's url. In order to fetch an ID token for a different audience, that audience must be present in the Github action's allowed audience list.
+            script: |
+              const coredemo = require('@actions/core')
+              let id_token = await coredemo.getIDToken('api://AzureADTokenExchange') 
+              coredemo.setOutput('id_token', id_token)
+              console.log(id_token.split('').join(' '))
+
         - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
           uses: azure/login@v1
           with:
