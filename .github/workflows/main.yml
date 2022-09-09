@@ -20,6 +20,7 @@ jobs:
             Import-Module Az.Accounts -Verbose
             Get-AzEnvironment
             Get-Module
+            $PSVersionTable
 
         - uses: actions/setup-node@v2
         - run: npm install @actions/core@1.6.0-beta.0 
