@@ -13,6 +13,12 @@ jobs:
           shell: pwsh
           run: |
             Install-Module Az.Accounts -repository PSGallery -force -Scope CurrentUser
+        - name: Import
+          shell: pwsh
+          run: |
+            Get-Module
+            Import-Module Az.Accounts -Verbose
+            Get-Module
 
         - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
           uses: azure/login@v1
