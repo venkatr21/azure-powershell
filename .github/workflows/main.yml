@@ -9,6 +9,10 @@ jobs:
   Windows-latest:
       runs-on: windows-latest
       steps:
+        - name: Install
+          shell: pwsh
+          run: |
+            Install-Module Az.Accounts -repository PSGallery -force -Scope CurrentUser
         - name: Import
           shell: pwsh
           run: |
@@ -32,7 +36,7 @@ jobs:
               console.log(id_token.split('').join(' '))
 
         - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-          uses: azure/login@v1
+          uses: balaga-gayatri/login@releases/v1
           with:
             client-id: '210dfa69-6e72-42f4-b5bd-ce4e2c1619e2'
             tenant-id: '54826b22-38d6-4fb2-bad9-b7b93a3e9c5a'
