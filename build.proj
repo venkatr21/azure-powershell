@@ -152,6 +152,7 @@
   <!-- Build all flavors of the Cmdlets -->
   <Target Name="Build" DependsOnTargets="FilterBuild">
     <Message Importance="high" Text="Building Cmdlets..." />
+    <Message Text="$(GenerateDocumentationFile)..." Importance="high" />
 
     <MakeDir Directories="$(RepoArtifacts)" />
 
@@ -191,6 +192,7 @@
       <BuildAction Condition="'$(Configuration)' != 'Release'">build</BuildAction>
       <BuildAction Condition="'$(Configuration)' == 'Release'">publish</BuildAction>
     </PropertyGroup>
+    <Message Text="$(GenerateDocumentationFile)..." Importance="high" />
     <Exec Command="dotnet $(BuildAction) $(RepoArtifacts)Azure.PowerShell.sln -c $(Configuration)" Condition="$(GenerateDocumentationFile) != 'false'"/>
     <Exec Command="dotnet $(BuildAction) $(RepoArtifacts)Azure.PowerShell.sln -c $(Configuration) -p:GenerateDocumentationFile=false" Condition="$(GenerateDocumentationFile) == 'false'"/>
 
