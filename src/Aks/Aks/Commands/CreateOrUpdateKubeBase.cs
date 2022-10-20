@@ -66,7 +66,7 @@ namespace Microsoft.Azure.Commands.Aks
         [ValidateNotNullOrEmpty]
         [ValidatePattern("^[a-zA-Z0-9][a-zA-Z0-9_.-]*$")]
         [ValidateLength(2, 64)]
-        public string Name { get; set; }
+        public string NewName { get; set; }
 
         [Parameter(
             Position = 2,
@@ -287,7 +287,7 @@ namespace Microsoft.Azure.Commands.Aks
                     clientSecret = RandomBase64String(16);
                 }              
 
-                acsServicePrincipal = BuildServicePrincipal(Name, clientSecret);
+                acsServicePrincipal = BuildServicePrincipal(NewName, clientSecret);
                 WriteVerbose(Resources.CreatedANewServicePrincipalAndAssignedTheContributorRole);
                 StoreServicePrincipal(acsServicePrincipal);
             }
@@ -340,7 +340,7 @@ namespace Microsoft.Azure.Commands.Aks
             RoleAssignment roleAssignment = null;
             var actionSuccess = RetryAction(() =>
             {
-                roleAssignment = AuthClient.RoleAssignments.List().Where(x => x.Properties.RoleDefinitionId == roleDefinitionId && x.Name == Name).FirstOrDefault();
+                roleAssignment = AuthClient.RoleAssignments.List().Where(x => x.Properties.RoleDefinitionId == roleDefinitionId && x.Name == NewName).FirstOrDefault();
             });
             if (!actionSuccess)
             {
@@ -411,7 +411,7 @@ namespace Microsoft.Azure.Commands.Aks
         {
             try
             {
-                var exists = Client.ManagedClusters.Get(ResourceGroupName, Name) != null;
+                var exists = Client.ManagedClusters.Get(ResourceGroupName, NewName) != null;
                 WriteVerbose(string.Format(Resources.ClusterExists, exists));
                 return exists;
             }
@@ -505,7 +505,7 @@ namespace Microsoft.Azure.Commands.Aks
         /// <returns>Default DNS prefix string</returns>
         protected string DefaultDnsPrefix()
         {
-            var namePart = string.Join("", DnsRegex.Replace(Name, "").Take(5));
+            var namePart = string.Join("", DnsRegex.Replace(NewName, "").Take(5));
             if (char.IsDigit(namePart[0]))
             {
                 namePart = "a" + string.Join("", namePart.Skip(1));

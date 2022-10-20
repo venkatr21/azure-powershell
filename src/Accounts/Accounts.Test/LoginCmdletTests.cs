@@ -547,7 +547,7 @@ namespace Microsoft.Azure.Commands.Profile.Test
             var cmdlet = new AddAzureRMEnvironmentCommand()
             {
                 CommandRuntime = commandRuntimeMock,
-                Name = "Katal",
+                NewName = "Katal",
                 ARMEndpoint = "https://management.azure.com/",
                 AzureKeyVaultDnsSuffix = "vault.local.azurestack.external",
                 AzureKeyVaultServiceEndpointResourceId = "https://vault.local.azurestack.external"
@@ -569,7 +569,7 @@ namespace Microsoft.Azure.Commands.Profile.Test
             commandRuntimeMock = new MockCommandRuntime();
             var profileClient = new RMProfileClient(AzureRmProfileProvider.Instance.GetProfile<AzureRmProfile>());
             IAzureEnvironment env = AzureRmProfileProvider.Instance.Profile.Environments.First((e) => string.Equals(e.Name, "KaTaL", StringComparison.OrdinalIgnoreCase));
-            Assert.Equal(env.Name, cmdlet.Name);
+            Assert.Equal(env.Name, cmdlet.NewName);
             Assert.Equal(env.GetEndpoint(AzureEnvironment.Endpoint.AzureKeyVaultDnsSuffix), dict["AzureKeyVaultDnsSuffix"]);
             Assert.Equal(env.GetEndpoint(AzureEnvironment.Endpoint.AzureKeyVaultServiceEndpointResourceId), dict["AzureKeyVaultServiceEndpointResourceId"]);
 
@@ -595,7 +595,7 @@ namespace Microsoft.Azure.Commands.Profile.Test
             var cmdlet2 = new AddAzureRMEnvironmentCommand()
             {
                 CommandRuntime = commandRuntimeMock,
-                Name = "Katal",
+                NewName = "Katal",
                 ARMEndpoint = "https://management.azure.com/",
                 AzureKeyVaultDnsSuffix = "adminvault.local.azurestack.external",
                 AzureKeyVaultServiceEndpointResourceId = "https://adminvault.local.azurestack.external"
@@ -617,7 +617,7 @@ namespace Microsoft.Azure.Commands.Profile.Test
 
             profileClient = new RMProfileClient(AzureRmProfileProvider.Instance.GetProfile<AzureRmProfile>());
             env = AzureRmProfileProvider.Instance.Profile.Environments.First((e) => string.Equals(e.Name, "KaTaL", StringComparison.OrdinalIgnoreCase));
-            Assert.Equal(env.Name, cmdlet.Name);
+            Assert.Equal(env.Name, cmdlet.NewName);
             Assert.Equal(env.GetEndpoint(AzureEnvironment.Endpoint.AzureKeyVaultDnsSuffix), dict["AzureKeyVaultDnsSuffix"]);
             Assert.Equal(env.GetEndpoint(AzureEnvironment.Endpoint.AzureKeyVaultServiceEndpointResourceId), dict["AzureKeyVaultServiceEndpointResourceId"]);
 

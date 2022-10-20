@@ -173,11 +173,11 @@ namespace Microsoft.Azure.Commands.Aks
                             customHeaders.Add(key.ToString(), values);
                         }
 
-                        cluster = Client.ManagedClusters.CreateOrUpdateWithHttpMessagesAsync(ResourceGroupName, Name, managedCluster, customHeaders).GetAwaiter().GetResult().Body;
+                        cluster = Client.ManagedClusters.CreateOrUpdateWithHttpMessagesAsync(ResourceGroupName, NewName, managedCluster, customHeaders).GetAwaiter().GetResult().Body;
                     }
                     else
                     {
-                        cluster = Client.ManagedClusters.CreateOrUpdate(ResourceGroupName, Name, managedCluster);
+                        cluster = Client.ManagedClusters.CreateOrUpdate(ResourceGroupName, NewName, managedCluster);
                     }
                     var psObj = PSMapper.Instance.Map<PSKubernetesCluster>(cluster);
 
@@ -192,7 +192,7 @@ namespace Microsoft.Azure.Commands.Aks
                     var sdkApiParameterMap = new Dictionary<string, CmdletParameterNameValuePair>()
                     {
                         { Constants.DotNetApiParameterResourceGroupName, new CmdletParameterNameValuePair(nameof(ResourceGroupName), ResourceGroupName) },
-                        { Constants.DotNetApiParameterResourceName, new CmdletParameterNameValuePair(nameof(Name), Name) },
+                        { Constants.DotNetApiParameterResourceName, new CmdletParameterNameValuePair(nameof(NewName), NewName) },
                         { "Name", new CmdletParameterNameValuePair(nameof(NodeName), managedCluster.AgentPoolProfiles.FirstOrDefault()?.Name) },
                     };
 
@@ -203,7 +203,7 @@ namespace Microsoft.Azure.Commands.Aks
                 }
             };
 
-            var msg = $"{Name} in {ResourceGroupName}";
+            var msg = $"{NewName} in {ResourceGroupName}";
 
             if (Exists())
             {
@@ -353,7 +353,7 @@ namespace Microsoft.Azure.Commands.Aks
 
             var managedCluster = new ManagedCluster(
                 Location,
-                name: Name,
+                name: NewName,
                 tags: TagsConversionHelper.CreateTagDictionary(Tag, true),
                 dnsPrefix: DnsNamePrefix,
                 kubernetesVersion: KubernetesVersion,

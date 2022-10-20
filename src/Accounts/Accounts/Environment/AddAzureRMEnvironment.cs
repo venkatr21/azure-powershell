@@ -48,7 +48,7 @@ namespace Microsoft.Azure.Commands.Profile
 
         [Parameter(ParameterSetName = EnvironmentPropertiesParameterSet, Position = 0, Mandatory = true, ValueFromPipelineByPropertyName = true)]
         [Parameter(ParameterSetName = MetadataParameterSet, Position = 0, Mandatory = true, ValueFromPipelineByPropertyName = true)]
-        public string Name { get; set; }
+        public string NewName { get; set; }
 
         [Parameter(ParameterSetName = EnvironmentPropertiesParameterSet, Position = 1, Mandatory = false, ValueFromPipelineByPropertyName = true)]
         public string PublishSettingsFileUrl { get; set; }
@@ -232,13 +232,13 @@ namespace Microsoft.Azure.Commands.Profile
 
         public override void ExecuteCmdlet()
         {
-            ConfirmAction("adding environment", Name,
+            ConfirmAction("adding environment", NewName,
                 () =>
                 {
-                    if (AzureEnvironment.PublicEnvironments.Keys.Any((k) => string.Equals(k, Name, StringComparison.CurrentCultureIgnoreCase)))
+                    if (AzureEnvironment.PublicEnvironments.Keys.Any((k) => string.Equals(k, NewName, StringComparison.CurrentCultureIgnoreCase)))
                     {
                         throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
-                            "Cannot add built-in or discovered environment {0}.", Name));
+                            "Cannot add built-in or discovered environment {0}.", NewName));
                     }
 
                     if (this.ParameterSetName.Equals(MetadataParameterSet, StringComparison.Ordinal))
@@ -252,10 +252,10 @@ namespace Microsoft.Azure.Commands.Profile
 
                         var defProfile = GetDefaultProfile();
                         IAzureEnvironment newEnvironment;
-                        if (!defProfile.TryGetEnvironment(this.Name, out newEnvironment))
+                        if (!defProfile.TryGetEnvironment(this.NewName, out newEnvironment))
                         {
                             newEnvironment = new AzureEnvironment { 
-                                Name = this.Name,
+                                Name = this.NewName,
                                 Type = AzureEnvironment.TypeUserDefined
                             };
                         }
@@ -300,7 +300,7 @@ namespace Microsoft.Azure.Commands.Profile
                         else
                         {
                             newEnvironment = new AzureEnvironment(publicEnvironment.Value);
-                            newEnvironment.Name = Name;
+                            newEnvironment.Name = NewName;
                             SetEndpointIfProvided(newEnvironment, AzureEnvironment.Endpoint.AzureKeyVaultDnsSuffix,
                                     AzureKeyVaultDnsSuffix);
                             SetEndpointIfProvided(newEnvironment, AzureEnvironment.Endpoint.AzureKeyVaultServiceEndpointResourceId,
@@ -317,10 +317,10 @@ namespace Microsoft.Azure.Commands.Profile
                         ModifyContext((profile, profileClient) =>
                         {
 
-                            IAzureEnvironment newEnvironment = new AzureEnvironment { Name = Name };
-                            if (profile.EnvironmentTable.ContainsKey(Name))
+                            IAzureEnvironment newEnvironment = new AzureEnvironment { Name = NewName };
+                            if (profile.EnvironmentTable.ContainsKey(NewName))
                             {
-                                newEnvironment = profile.EnvironmentTable[Name];
+                                newEnvironment = profile.EnvironmentTable[NewName];
                             }
 
                             if (MyInvocation != null && MyInvocation.BoundParameters != null)
