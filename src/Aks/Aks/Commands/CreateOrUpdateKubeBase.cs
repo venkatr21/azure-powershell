@@ -66,7 +66,7 @@ namespace Microsoft.Azure.Commands.Aks
         [ValidateNotNullOrEmpty]
         [ValidatePattern("^[a-zA-Z0-9][a-zA-Z0-9_.-]*$")]
         [ValidateLength(2, 64)]
-        public string NewName { get; set; }
+        public string NewNames { get; set; }
 
         [Parameter(
             Position = 2,
@@ -78,7 +78,7 @@ namespace Microsoft.Azure.Commands.Aks
         [Parameter(Mandatory = false,
             HelpMessage = "Azure location for the cluster. Defaults to the location of the resource group.")]
         [LocationCompleter("Microsoft.ContainerService/managedClusters")]
-        public string Location { get; set; }
+        public string Locations { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "User name for the Linux Virtual Machines.")]
         [Alias("AdminUserName")]
@@ -188,10 +188,10 @@ namespace Microsoft.Azure.Commands.Aks
 
         protected void BeforeBuildNewCluster()
         {
-            if (!string.IsNullOrEmpty(ResourceGroupName) && string.IsNullOrEmpty(Location))
+            if (!string.IsNullOrEmpty(ResourceGroupName) && string.IsNullOrEmpty(Locations))
             {
                 var rg = RmClient.ResourceGroups.Get(ResourceGroupName);
-                Location = rg.Location;
+                Locations = rg.Location;
 
                 var validLocations = RmClient.Providers.Get("Microsoft.ContainerService").ResourceTypes.ToList().Find(x => x.ResourceType.Equals("managedClusters")).Locations;
                 validLocations = validLocations.Select(l => l.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower()).ToList();
@@ -201,19 +201,19 @@ namespace Microsoft.Azure.Commands.Aks
                     // Add check in case East US is removed from the list of valid locations
                     if (validLocations.Contains("eastus"))
                     {
-                        Location = "eastus";
+                        Locations = "eastus";
                     }
                     else
                     {
-                        Location = validLocations[0];
+                        Locations = validLocations[0];
                     }
 
-                    WriteVerbose(string.Format(Resources.UsingDefaultLocation, Location));
+                    WriteVerbose(string.Format(Resources.UsingDefaultLocation, Locations));
                 }
 
                 else
                 {
-                    WriteVerbose(string.Format(Resources.UsingLocationFromTheResourceGroup, Location,
+                    WriteVerbose(string.Format(Resources.UsingLocationFromTheResourceGroup, Locations,
                     ResourceGroupName));
                 }
             }
@@ -287,7 +287,7 @@ namespace Microsoft.Azure.Commands.Aks
                     clientSecret = RandomBase64String(16);
                 }              
 
-                acsServicePrincipal = BuildServicePrincipal(NewName, clientSecret);
+                acsServicePrincipal = BuildServicePrincipal(NewNames, clientSecret);
                 WriteVerbose(Resources.CreatedANewServicePrincipalAndAssignedTheContributorRole);
                 StoreServicePrincipal(acsServicePrincipal);
             }
@@ -340,7 +340,7 @@ namespace Microsoft.Azure.Commands.Aks
             RoleAssignment roleAssignment = null;
             var actionSuccess = RetryAction(() =>
             {
-                roleAssignment = AuthClient.RoleAssignments.List().Where(x => x.Properties.RoleDefinitionId == roleDefinitionId && x.Name == NewName).FirstOrDefault();
+                roleAssignment = AuthClient.RoleAssignments.List().Where(x => x.Properties.RoleDefinitionId == roleDefinitionId && x.Name == NewNames).FirstOrDefault();
             });
             if (!actionSuccess)
             {
@@ -411,7 +411,7 @@ namespace Microsoft.Azure.Commands.Aks
         {
             try
             {
-                var exists = Client.ManagedClusters.Get(ResourceGroupName, NewName) != null;
+                var exists = Client.ManagedClusters.Get(ResourceGroupName, NewNames) != null;
                 WriteVerbose(string.Format(Resources.ClusterExists, exists));
                 return exists;
             }
@@ -505,7 +505,7 @@ namespace Microsoft.Azure.Commands.Aks
         /// <returns>Default DNS prefix string</returns>
         protected string DefaultDnsPrefix()
         {
-            var namePart = string.Join("", DnsRegex.Replace(NewName, "").Take(5));
+            var namePart = string.Join("", DnsRegex.Replace(NewNames, "").Take(5));
             if (char.IsDigit(namePart[0]))
             {
                 namePart = "a" + string.Join("", namePart.Skip(1));

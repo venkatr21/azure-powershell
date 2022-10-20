@@ -116,8 +116,8 @@ namespace Microsoft.Azure.Commands.Aks
 
             WriteVerbose(string.Format(Resources.DeployingYourManagedKubeCluster, AcsSpFilePath));
             var managedCluster = new ManagedCluster(
-                Location,
-                name: NewName,
+                Locations,
+                name: NewNames,
                 tags: TagsConversionHelper.CreateTagDictionary(Tag, true),
                 dnsPrefix: DnsNamePrefix,
                 kubernetesVersion: KubernetesVersion,
@@ -145,7 +145,7 @@ namespace Microsoft.Azure.Commands.Aks
                 {
                     var resource = new ResourceIdentifier(Id);
                     ResourceGroupName = resource.ResourceGroupName;
-                    NewName = resource.ResourceName;
+                    NewNames = resource.ResourceName;
                     break;
                 }
                 case InputObjectParameterSet:
@@ -154,12 +154,12 @@ namespace Microsoft.Azure.Commands.Aks
                     cluster = PSMapper.Instance.Map<ManagedCluster>(InputObject);
                     var resource = new ResourceIdentifier(cluster.Id);
                     ResourceGroupName = resource.ResourceGroupName;
-                    NewName = resource.ResourceName;
+                    NewNames = resource.ResourceName;
                     break;
                 }
             }
 
-            var msg = $"{NewName} in {ResourceGroupName}";
+            var msg = $"{NewNames} in {ResourceGroupName}";
 
             if (ShouldProcess(msg, Resources.UpdateOrCreateAManagedKubernetesCluster))
             {
@@ -170,14 +170,14 @@ namespace Microsoft.Azure.Commands.Aks
                     {
                         if (cluster == null)
                         {
-                            cluster = Client.ManagedClusters.Get(ResourceGroupName, NewName);
+                            cluster = Client.ManagedClusters.Get(ResourceGroupName, NewNames);
                         }
 
-                        if (this.IsParameterBound(c => c.Location))
+                        if (this.IsParameterBound(c => c.Locations))
                         {
                             throw new AzPSArgumentException(
                                 Resources.LocationCannotBeUpdateForExistingCluster,
-                                nameof(Location),
+                                nameof(Locations),
                                 desensitizedMessage: Resources.LocationCannotBeUpdateForExistingCluster);
                         }
 
@@ -230,7 +230,7 @@ namespace Microsoft.Azure.Commands.Aks
                             {
                                 throw new AzPSArgumentException(
                                     Resources.SpecifiedAgentPoolDoesNotExist,
-                                    nameof(NewName),
+                                    nameof(NewNames),
                                     desensitizedMessage: Resources.SpecifiedAgentPoolDoesNotExist);
                             }
 
@@ -290,10 +290,10 @@ namespace Microsoft.Azure.Commands.Aks
                                 {
                                     throw new AzPSApplicationException(Resources.NotUsingVirtualMachineScaleSets);
                                 }
-                                var agentPoolClient = Client.AgentPools.Get(ResourceGroupName, NewName, agentPoolProfile.Name);
-                                Client.AgentPools.UpgradeNodeImageVersion(ResourceGroupName, NewName, agentPoolProfile.Name);
+                                var agentPoolClient = Client.AgentPools.Get(ResourceGroupName, NewNames, agentPoolProfile.Name);
+                                Client.AgentPools.UpgradeNodeImageVersion(ResourceGroupName, NewNames, agentPoolProfile.Name);
                             }
-                            cluster = Client.ManagedClusters.Get(ResourceGroupName, NewName);
+                            cluster = Client.ManagedClusters.Get(ResourceGroupName, NewNames);
                             WriteObject(PSMapper.Instance.Map<PSKubernetesCluster>(cluster));
                             return;
                         }
@@ -384,7 +384,7 @@ namespace Microsoft.Azure.Commands.Aks
                     }
                     SetIdentity(cluster);
 
-                    var kubeCluster = Client.ManagedClusters.CreateOrUpdate(ResourceGroupName, NewName, cluster);
+                    var kubeCluster = Client.ManagedClusters.CreateOrUpdate(ResourceGroupName, NewNames, cluster);
 
                     if (this.IsParameterBound(c => c.DiskEncryptionSetID))
                     {

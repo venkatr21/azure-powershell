@@ -14,6 +14,9 @@
 
 using Markdown.MAML.Parser;
 using Markdown.MAML.Transformer;
+using Newtonsoft.Json;
+using StaticAnalysis.BreakingChangeAnalyzer;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -114,6 +117,20 @@ namespace StaticAnalysis.HelpAnalyzer
                     }
                 }
             }
+            Directory.SetCurrentDirectory(Path.Combine(scopes.First(), "..", ".."));
+            DumpRecordForPipelineResult(helpLogger);
+        }
+
+        private void DumpRecordForPipelineResult(ReportLogger<HelpIssue> issueLogger)
+        {
+            var issueList = issueLogger.Records.Select(r => r as HelpIssue).Select(r => new Dictionary<string, string>() {
+                { "Severity", r.Severity < 2 ? "Error" : "Warning"},
+                { "Module", r.Assembly },
+                { "Target", r.Target},
+                { "Description", r.Description },
+                { "Remediation", r.Remediation }
+            }).ToList();
+            File.WriteAllText(Path.Combine("artifacts/PipelineResult", "StaticAnalysisBreakingChange.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
         }
 
         private void AnalyzeMamlHelp(

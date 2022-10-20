@@ -39,10 +39,10 @@ Param(
     $TestFramework='netcoreapp2.2',
 
     [String]
-    $TestOutputDirectory='artifacts\TestResults',
+    $TestOutputDirectory='artifacts/TestResults',
 
     [String]
-    $StaticAnalysisOutputDirectory='artifacts\StaticAnalysisResults',
+    $StaticAnalysisOutputDirectory='artifacts/StaticAnalysisResults',
 
     [String]
     $ModuleList

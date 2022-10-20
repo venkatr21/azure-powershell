@@ -173,11 +173,11 @@ namespace Microsoft.Azure.Commands.Aks
                             customHeaders.Add(key.ToString(), values);
                         }
 
-                        cluster = Client.ManagedClusters.CreateOrUpdateWithHttpMessagesAsync(ResourceGroupName, NewName, managedCluster, customHeaders).GetAwaiter().GetResult().Body;
+                        cluster = Client.ManagedClusters.CreateOrUpdateWithHttpMessagesAsync(ResourceGroupName, NewNames, managedCluster, customHeaders).GetAwaiter().GetResult().Body;
                     }
                     else
                     {
-                        cluster = Client.ManagedClusters.CreateOrUpdate(ResourceGroupName, NewName, managedCluster);
+                        cluster = Client.ManagedClusters.CreateOrUpdate(ResourceGroupName, NewNames, managedCluster);
                     }
                     var psObj = PSMapper.Instance.Map<PSKubernetesCluster>(cluster);
 
@@ -192,7 +192,7 @@ namespace Microsoft.Azure.Commands.Aks
                     var sdkApiParameterMap = new Dictionary<string, CmdletParameterNameValuePair>()
                     {
                         { Constants.DotNetApiParameterResourceGroupName, new CmdletParameterNameValuePair(nameof(ResourceGroupName), ResourceGroupName) },
-                        { Constants.DotNetApiParameterResourceName, new CmdletParameterNameValuePair(nameof(NewName), NewName) },
+                        { Constants.DotNetApiParameterResourceName, new CmdletParameterNameValuePair(nameof(NewNames), NewNames) },
                         { "Name", new CmdletParameterNameValuePair(nameof(NodeName), managedCluster.AgentPoolProfiles.FirstOrDefault()?.Name) },
                     };
 
@@ -203,7 +203,7 @@ namespace Microsoft.Azure.Commands.Aks
                 }
             };
 
-            var msg = $"{NewName} in {ResourceGroupName}";
+            var msg = $"{NewNames} in {ResourceGroupName}";
 
             if (Exists())
             {
@@ -352,8 +352,8 @@ namespace Microsoft.Azure.Commands.Aks
             WriteVerbose(string.Format(Resources.DeployingYourManagedKubeCluster, AcsSpFilePath));
 
             var managedCluster = new ManagedCluster(
-                Location,
-                name: NewName,
+                Locations,
+                name: NewNames,
                 tags: TagsConversionHelper.CreateTagDictionary(Tag, true),
                 dnsPrefix: DnsNamePrefix,
                 kubernetesVersion: KubernetesVersion,

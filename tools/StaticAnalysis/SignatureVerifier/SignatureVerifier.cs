@@ -14,6 +14,7 @@
 
 using Newtonsoft.Json;
 
+using StaticAnalysis.BreakingChangeAnalyzer;
 using StaticAnalysis.ProblemIds;
 using System;
 using System.Collections.Generic;
@@ -287,6 +288,20 @@ namespace StaticAnalysis.SignatureVerifier
                     Directory.SetCurrentDirectory(savedDirectory);
                 }
             }
+            Directory.SetCurrentDirectory(Path.Combine(cmdletProbingDirs.First(), "..", ".."));
+            DumpRecordForPipelineResult(issueLogger);
+        }
+
+        private void DumpRecordForPipelineResult(ReportLogger<SignatureIssue> issueLogger)
+        {
+            var issueList = issueLogger.Records.Select(r => r as SignatureIssue).Select(r => new Dictionary<string, string>() {
+                { "Severity", r.Severity < 2 ? "Error" : "Warning"},
+                { "Module", r.AssemblyFileName },
+                { "Target", r.Target},
+                { "Description", r.Description },
+                { "Remediation", r.Remediation }
+            }).ToList();
+            File.WriteAllText(Path.Combine("artifacts/PipelineResult", "StaticAnalysisBreakingChange.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
         }
 
         /// <summary>
