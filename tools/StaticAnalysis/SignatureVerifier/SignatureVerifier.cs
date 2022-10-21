@@ -288,7 +288,7 @@ namespace StaticAnalysis.SignatureVerifier
                     Directory.SetCurrentDirectory(savedDirectory);
                 }
             }
-            Directory.SetCurrentDirectory(Path.Combine(cmdletProbingDirs.First(), "..", ".."));
+            Directory.SetCurrentDirectory(savedDirectory);
             DumpRecordForPipelineResult(issueLogger);
         }
 
@@ -301,7 +301,8 @@ namespace StaticAnalysis.SignatureVerifier
                 { "Description", r.Description },
                 { "Remediation", r.Remediation }
             }).ToList();
-            File.WriteAllText(Path.Combine("artifacts/PipelineResult", "StaticAnalysisBreakingChange.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
+            Dictionary<string, object> config = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(".ci-config.json"));
+            File.WriteAllText(Path.Combine(config["artifactPipelineInfoFolder"] as string, "StaticAnalysisSignature.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
         }
 
         /// <summary>

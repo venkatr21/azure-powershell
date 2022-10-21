@@ -89,6 +89,7 @@ namespace StaticAnalysis.BreakingChangeAnalyzer
             Func<string, bool> cmdletFilter,
             IEnumerable<string> modulesToAnalyze)
         {
+            var savedDirectory = Directory.GetCurrentDirectory();
             var processedHelpFiles = new List<string>();
             var issueLogger = Logger.CreateLogger<BreakingChangeIssue>("BreakingChangeIssues.csv");
 
@@ -197,7 +198,7 @@ namespace StaticAnalysis.BreakingChangeAnalyzer
   
                 }
             }
-            Directory.SetCurrentDirectory(Path.Combine(cmdletProbingDirs.First(), "..", ".."));
+            Directory.SetCurrentDirectory(savedDirectory);
             DumpRecordForPipelineResult(issueLogger);
         }
 
@@ -210,7 +211,8 @@ namespace StaticAnalysis.BreakingChangeAnalyzer
                 { "Description", r.Description }, 
                 { "Remediation", r.Remediation }
             }).ToList();
-            File.WriteAllText(Path.Combine("artifacts/PipelineResult", "StaticAnalysisBreakingChange.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
+            Dictionary<string, object> config = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(".ci-config.json"));
+            File.WriteAllText(Path.Combine(config["artifactPipelineInfoFolder"] as string, "StaticAnalysisBreakingChange.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
         }
 
         /// <summary>
