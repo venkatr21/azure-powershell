@@ -33,6 +33,7 @@ Disable the addons for aks.
 
 ### Example 1
 ```powershell
+$a = <123>
 Get-AzAksCluster -ResourceGroupName group -Name myCluster | Disable-AzAksAddon -Name HttpApplicationRouting,Monitoring,AzurePolicy,VirtualNode,KubeDashboard
 ```
 

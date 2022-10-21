@@ -108,6 +108,28 @@ if ($PSCmdlet.ParameterSetName -eq "Script" -or !$SkipAnalyzing) {
     # Summarize analysis results, output in Result.csv
     if ($analysisResultsTable) {
         $analysisResultsTable | Where-Object { $_ -ne $null } | Export-Csv "$PSScriptRoot\..\..\..\artifacts\StaticAnalysisResults\ExampleIssues.csv" -NoTypeInformation
+        $ArtifactPipelineInfoFolder = (Get-Content "$PSScriptRoot\..\..\..\.ci-config.json" | ConvertFrom-Json).artifactPipelineInfoFolder
+        $analysisResultsTable | Where-Object { $_ -ne $null} | % {
+            If ($_.Severity -Lt 2)
+            {
+                $Severity = "Error"
+            }
+            Else
+            {
+                $Severity = "Warning"
+            }
+            @{
+                Severity = $Severity;
+                Module = "Az.$_.Module";
+                Cmdlet = $_.Cmdlet;
+                Example = $_.Example;
+                Line = $_.Line;
+                RuleName = $_.RuleName;
+                Description = $_.Description;
+                Extent = $_.Extent;
+                Remediation = $_.Remediation;
+            }
+        } | ConvertTo-Json -Depth 5 | Out-File "$PSScriptRoot\..\..\..\$ArtifactPipelineInfoFolder\StaticAnalysisExample.json"
     }
 }
 
