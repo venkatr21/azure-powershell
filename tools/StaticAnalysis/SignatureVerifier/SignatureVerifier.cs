@@ -288,21 +288,6 @@ namespace StaticAnalysis.SignatureVerifier
                     Directory.SetCurrentDirectory(savedDirectory);
                 }
             }
-            Directory.SetCurrentDirectory(savedDirectory);
-            DumpRecordForPipelineResult(issueLogger);
-        }
-
-        private void DumpRecordForPipelineResult(ReportLogger<SignatureIssue> issueLogger)
-        {
-            var issueList = issueLogger.Records.Select(r => r as SignatureIssue).Select(r => new Dictionary<string, string>() {
-                { "Severity", r.Severity < 2 ? "Error" : "Warning"},
-                { "Module", r.AssemblyFileName },
-                { "Target", r.Target},
-                { "Description", r.Description },
-                { "Remediation", r.Remediation }
-            }).ToList();
-            Dictionary<string, object> config = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(".ci-config.json"));
-            File.WriteAllText(Path.Combine(config["artifactPipelineInfoFolder"] as string, "StaticAnalysisSignature.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
         }
 
         /// <summary>

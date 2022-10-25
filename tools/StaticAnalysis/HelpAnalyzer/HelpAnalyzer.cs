@@ -118,21 +118,6 @@ namespace StaticAnalysis.HelpAnalyzer
                     }
                 }
             }
-            Directory.SetCurrentDirectory(savedDirectory);
-            DumpRecordForPipelineResult(helpLogger);
-        }
-
-        private void DumpRecordForPipelineResult(ReportLogger<HelpIssue> issueLogger)
-        {
-            var issueList = issueLogger.Records.Select(r => r as HelpIssue).Select(r => new Dictionary<string, string>() {
-                { "Severity", r.Severity < 2 ? "Error" : "Warning"},
-                { "Module", r.Assembly },
-                { "Target", r.Target},
-                { "Description", r.Description },
-                { "Remediation", r.Remediation }
-            }).ToList();
-            Dictionary<string, object> config = JsonConvert.DeserializeObject<Dictionary<string, object>> (File.ReadAllText(".ci-config.json"));
-            File.WriteAllText(Path.Combine(config["artifactPipelineInfoFolder"] as string, "StaticAnalysisHelp.json"), JsonConvert.SerializeObject(issueList, Formatting.Indented));
         }
 
         private void AnalyzeMamlHelp(
