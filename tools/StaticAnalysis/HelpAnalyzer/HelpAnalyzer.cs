@@ -14,7 +14,6 @@
 
 using Markdown.MAML.Parser;
 using Markdown.MAML.Transformer;
-
 using System;
 using System.Collections.Generic;
 using System.IO;
