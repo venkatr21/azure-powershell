@@ -14,7 +14,6 @@
 
 using Newtonsoft.Json;
 
-using StaticAnalysis.BreakingChangeAnalyzer;
 using StaticAnalysis.ProblemIds;
 using System;
 using System.Collections.Generic;

@@ -14,8 +14,6 @@
 
 using Markdown.MAML.Parser;
 using Markdown.MAML.Transformer;
-using Newtonsoft.Json;
-using StaticAnalysis.BreakingChangeAnalyzer;
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +21,6 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 using Tools.Common.Issues;
 using Tools.Common.Loaders;
