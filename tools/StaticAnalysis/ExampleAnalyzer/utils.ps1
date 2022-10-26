@@ -516,7 +516,7 @@ function Get-ScriptAnalyzerResult {
         $locationMessage = $CodeMap[$analysisResult.Line - 1]
         if($analysisResult.RuleSuppressionID -ge 5000 -and $analysisResult.RuleSuppressionID -le 5199){
             $result = [AnalysisOutput]@{
-                Module = $locationMessage.Module
+                Module = "Az.$($locationMessage.Module)"
                 Cmdlet = $locationMessage.Cmdlet
                 Example = $locationMessage.Example
                 Line = $locationMessage.Line
@@ -530,7 +530,7 @@ function Get-ScriptAnalyzerResult {
         }
         else{
             $result = [AnalysisOutput]@{
-                Module = $locationMessage.Module
+                Module = "Az.$($locationMessage.Module)"
                 Cmdlet = $locationMessage.Cmdlet
                 Example = $locationMessage.Example
                 Line = $locationMessage.Line
