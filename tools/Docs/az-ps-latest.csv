@@ -83,7 +83,7 @@ pac81,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-relea
 pac82,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.MachineLearning.1.1.3.nupkg;sourceType=sa]Az.MachineLearning,1.1.3
 pac83,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.MachineLearningServices.0.1.0.nupkg;sourceType=sa]Az.MachineLearningServices,0.1.0
 pac84,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.Maintenance.1.2.0.nupkg;sourceType=sa]Az.Maintenance,1.2.0
-pac85,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.ManagedServiceIdentity.1.1.0.nupkg;sourceType=sa]Az.ManagedServiceIdentity,1.1.0
+pac85,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.ManagedServiceIdentity.1.0.0.nupkg;sourceType=sa]Az.ManagedServiceIdentity,1.0.0
 pac86,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.ManagedServices.3.0.0.nupkg;sourceType=sa]Az.ManagedServices,3.0.0
 pac87,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.ManagementPartner.0.7.2.nupkg;sourceType=sa]Az.ManagementPartner,0.7.2
 pac88,[ps=true;customSource=https://azpspackage.blob.core.windows.net/docs-release/Az.Maps.0.8.0.nupkg;sourceType=sa]Az.Maps,0.8.0
