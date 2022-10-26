@@ -459,7 +459,7 @@ function Set-AnalysisOutput {
         [String]$Remediation
     )
     $result = [AnalysisOutput]@{
-        Module = $Module
+        Module = "Az.$Module"
         Cmdlet = $Cmdlet
         Example = $Example
         Line = $Line

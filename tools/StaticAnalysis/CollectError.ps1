@@ -102,7 +102,7 @@ If (Test-Path -Path $ExampleIssuePath)
         }
         $ExampleIssueArray += @{
             Severity = $Severity;
-            Module = "Az.$Record.Module";
+            Module = $Record.Module;
             Cmdlet = $Record.Cmdlet;
             Example = $Record.Example;
             Line = $Record.Line;
