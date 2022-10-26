@@ -70,7 +70,7 @@ If (Test-Path -Path $HelpIssuePath)
         }
         $HelpIssueArray += @{
             Severity = $Severity;
-            Module = $Record.AssemblyFileName;
+            Module = $Record.Assembly;
             Target = $Record.Target;
             Description = $Record.Description;
             Remediation = $Record.Remediation;
