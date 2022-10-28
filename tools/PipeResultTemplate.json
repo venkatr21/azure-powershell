@@ -1,5 +1,5 @@
 {
-    "Build": {
+    "build": {
         "Name": "Build",
         "Order": 1,
         "Details": [
