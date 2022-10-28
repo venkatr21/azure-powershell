@@ -14,7 +14,7 @@ variables:
   AnalysisTimeoutInMinutes: 120
   TestTimeoutInMinutes: 180
   BuildAzPredictor: false
-  platform: PowerShell Core
+  PowerShellPlatform: PowerShell Core
 
 trigger: none
 
@@ -44,7 +44,7 @@ jobs:
       osName: $(OSName)
       configuration: ${{ variables.Configuration }}
       testFramework: ${{ variables.TestFramework }}
-      platform: ${{ variables.Platform }}
+      powerShellPlatform: ${{ variables.PowerShellPlatform }}
 
 - job: Analyze
   displayName: Analyze
@@ -65,7 +65,7 @@ jobs:
       osName: $(OSName)
       configuration: ${{ variables.Configuration }}
       testFramework: ${{ variables.TestFramework }}
-      platform: ${{ variables.Platform }}
+      powerShellPlatform: ${{ variables.PowerShellPlatform }}
 
 - job: Test
   displayName: Test
@@ -93,4 +93,4 @@ jobs:
       testFramework: ${{ variables.TestFramework }}
       testTarget: ${{ variables.TestTarget }}
       configuration: ${{ variables.Configuration }}
-      platform: ${{ variables.Platform }}
+      powerShellPlatform: ${{ variables.PowerShellPlatform }}

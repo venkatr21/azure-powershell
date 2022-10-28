@@ -114,7 +114,7 @@ If ($Build)
         {
             $OS = "Others"
         }
-        $Platform = "$($Env:platform) - $OS"
+        $Platform = "$($Env:PowerShellPlatform) - $OS"
         $Template = Get-Content "$PSScriptRoot/PipeResultTemplate.json" | ConvertFrom-Json
         $ModuleBuildInfoList = @()
         $CIPlan = Get-Content $RepoArtifacts/PipelineResult/CIPlan.json | ConvertFrom-Json
