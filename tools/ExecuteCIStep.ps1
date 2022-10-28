@@ -181,7 +181,6 @@ If ($Build)
                 }
             }
             $Detail = @{
-                Platform = $Platform;
                 Status = $DependencyStepStatus;
                 Modules = $ModuleInfoList;
             }
